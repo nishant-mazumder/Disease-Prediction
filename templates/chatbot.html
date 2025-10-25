@@ -1,0 +1,511 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Health Chatbot - MedPredict{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-container {
+        height: 70vh;
+        max-height: 600px;
+        overflow-y: auto;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .message {
+        margin-bottom: 15px;
+        animation: fadeInUp 0.5s ease-out;
+    }
+    
+    .user-message {
+        text-align: right;
+    }
+    
+    .bot-message {
+        text-align: left;
+    }
+    
+    .message-bubble {
+        display: inline-block;
+        max-width: 80%;
+        padding: 12px 18px;
+        border-radius: 20px;
+        word-wrap: break-word;
+        position: relative;
+    }
+    
+    .user-bubble {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-bottom-right-radius: 5px;
+    }
+    
+    .bot-bubble {
+        background: white;
+        color: #333;
+        border: 1px solid #e0e0e0;
+        border-bottom-left-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .typing-indicator {
+        display: none;
+        padding: 12px 18px;
+        background: white;
+        border-radius: 20px;
+        border-bottom-left-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        max-width: 80px;
+    }
+    
+    .typing-dots {
+        display: flex;
+        gap: 4px;
+    }
+    
+    .typing-dot {
+        width: 8px;
+        height: 8px;
+        background: #667eea;
+        border-radius: 50%;
+        animation: typing 1.4s infinite ease-in-out;
+    }
+    
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    .typing-dot:nth-child(3) { animation-delay: 0s; }
+    
+    .input-container {
+        background: white;
+        border-radius: 25px;
+        padding: 10px 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+    
+    .input-container:focus-within {
+        border-color: #667eea;
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+    }
+    
+    .chat-input {
+        border: none;
+        outline: none;
+        flex: 1;
+        padding: 10px 15px;
+        font-size: 16px;
+        background: transparent;
+    }
+    
+    .send-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .send-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .send-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .welcome-message {
+        text-align: center;
+        padding: 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .welcome-message h4 {
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+    
+    .welcome-message p {
+        margin: 0;
+        opacity: 0.9;
+    }
+    
+    .quick-actions {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .quick-action-btn {
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 20px;
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        color: #666;
+    }
+    
+    .quick-action-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-2px);
+    }
+    
+    .chat-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 20px 20px 0 0;
+        text-align: center;
+    }
+    
+    .chat-header h3 {
+        margin: 0;
+        font-weight: 600;
+    }
+    
+    .chat-header p {
+        margin: 5px 0 0 0;
+        opacity: 0.9;
+        font-size: 14px;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes typing {
+        0%, 60%, 100% {
+            transform: translateY(0);
+        }
+        30% {
+            transform: translateY(-10px);
+        }
+    }
+    
+    .emoji {
+        font-size: 1.2em;
+        margin-right: 5px;
+    }
+    
+    .confidence-bar {
+        width: 100%;
+        height: 6px;
+        background: #e0e0e0;
+        border-radius: 3px;
+        overflow: hidden;
+        margin: 10px 0;
+    }
+    
+    .confidence-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #0abde3);
+        border-radius: 3px;
+        transition: width 0.5s ease;
+    }
+    
+    .symptom-tag {
+        display: inline-block;
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        margin: 2px;
+        border: 1px solid #bbdefb;
+    }
+    
+    .precaution-item {
+        background: #f8f9fa;
+        border-left: 4px solid #28a745;
+        padding: 10px 15px;
+        margin: 5px 0;
+        border-radius: 0 8px 8px 0;
+    }
+    
+    .reset-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255,255,255,0.2);
+        border: none;
+        color: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .reset-btn:hover {
+        background: rgba(255,255,255,0.3);
+        transform: rotate(180deg);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="chat-header">
+                    <h3><i class="fas fa-robot me-2"></i>Health Assistant Chatbot</h3>
+                    <p>Describe your symptoms and get AI-powered health insights</p>
+                    <button class="reset-btn" onclick="resetChat()" title="Start New Conversation">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+                
+                <div class="card-body p-0">
+                    <div class="chat-container" id="chatContainer">
+                        <div class="welcome-message">
+                            <h4><i class="fas fa-heartbeat me-2"></i>Welcome to Health Assistant!</h4>
+                            <p>I'm here to help you understand your symptoms and provide health insights. Please describe what you're experiencing.</p>
+                        </div>
+                        
+                        <div class="quick-actions">
+                            <button class="quick-action-btn" onclick="sendQuickMessage('I have fever and headache')">
+                                <i class="fas fa-thermometer-half me-1"></i>Fever & Headache
+                            </button>
+                            <button class="quick-action-btn" onclick="sendQuickMessage('I have stomach pain and nausea')">
+                                <i class="fas fa-stomach me-1"></i>Stomach Issues
+                            </button>
+                            <button class="quick-action-btn" onclick="sendQuickMessage('I have cough and chest pain')">
+                                <i class="fas fa-lungs me-1"></i>Chest & Breathing
+                            </button>
+                            <button class="quick-action-btn" onclick="sendQuickMessage('I have joint pain and muscle weakness')">
+                                <i class="fas fa-running me-1"></i>Joint & Muscle
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-3">
+                        <div class="input-container d-flex align-items-center">
+                            <input type="text" id="messageInput" class="chat-input" placeholder="Describe your symptoms..." onkeypress="handleKeyPress(event)">
+                            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Typing Indicator Template -->
+<div id="typingIndicator" class="typing-indicator">
+    <div class="typing-dots">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let isTyping = false;
+
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+function sendQuickMessage(message) {
+    document.getElementById('messageInput').value = message;
+    sendMessage();
+}
+
+
+function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message to chat
+    addMessage(message, 'user');
+    
+    // Clear input
+    input.value = '';
+    
+    // Disable send button and show typing
+    setTyping(true);
+    
+    // Send to backend
+    fetch('{% url "chatbot_api" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            message: message
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        setTyping(false);
+        
+        if (data.type === 'success') {
+            addMessage(data.response, 'bot');
+        } else {
+            addMessage('Sorry, there was an error processing your request.', 'bot');
+        }
+    })
+    .catch(error => {
+        setTyping(false);
+        addMessage('Sorry, there was an error connecting to the server.', 'bot');
+        console.error('Error:', error);
+    });
+}
+
+function addMessage(content, sender) {
+    const chatContainer = document.getElementById('chatContainer');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    
+    const bubble = document.createElement('div');
+    bubble.className = `message-bubble ${sender}-bubble`;
+    
+    // Format the message content
+    const formattedContent = formatMessage(content);
+    bubble.innerHTML = formattedContent;
+    
+    messageDiv.appendChild(bubble);
+    chatContainer.appendChild(messageDiv);
+    
+    // Scroll to bottom
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function formatMessage(content) {
+    // Convert markdown-like formatting to HTML
+    let formatted = content
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>')
+        .replace(/✅/g, '<span class="emoji">✅</span>')
+        .replace(/❌/g, '<span class="emoji">❌</span>')
+        .replace(/🤖/g, '<span class="emoji">🤖</span>')
+        .replace(/📖/g, '<span class="emoji">📖</span>')
+        .replace(/🛡️/g, '<span class="emoji">🛡️</span>')
+        .replace(/💡/g, '<span class="emoji">💡</span>')
+        .replace(/⚠️/g, '<span class="emoji">⚠️</span>')
+        .replace(/🎯/g, '<span class="emoji">🎯</span>')
+        .replace(/🔄/g, '<span class="emoji">🔄</span>')
+        .replace(/👉/g, '<span class="emoji">👉</span>');
+    
+    return formatted;
+}
+
+function setTyping(show) {
+    const sendBtn = document.getElementById('sendBtn');
+    const typingIndicator = document.getElementById('typingIndicator');
+    
+    if (show) {
+        sendBtn.disabled = true;
+        sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        typingIndicator.style.display = 'block';
+        typingIndicator.className = 'typing-indicator';
+        document.getElementById('chatContainer').appendChild(typingIndicator);
+        document.getElementById('chatContainer').scrollTop = document.getElementById('chatContainer').scrollHeight;
+    } else {
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+        typingIndicator.style.display = 'none';
+    }
+}
+
+function resetChat() {
+    if (confirm('Are you sure you want to start a new conversation?')) {
+        fetch('{% url "reset_chatbot" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Clear chat container
+                const chatContainer = document.getElementById('chatContainer');
+                chatContainer.innerHTML = `
+                    <div class="welcome-message">
+                        <h4><i class="fas fa-heartbeat me-2"></i>Welcome to Health Assistant!</h4>
+                        <p>I'm here to help you understand your symptoms and provide health insights. Please describe what you're experiencing.</p>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" onclick="sendQuickMessage('I have fever and headache')">
+                            <i class="fas fa-thermometer-half me-1"></i>Fever & Headache
+                        </button>
+                        <button class="quick-action-btn" onclick="sendQuickMessage('I have stomach pain and nausea')">
+                            <i class="fas fa-stomach me-1"></i>Stomach Issues
+                        </button>
+                        <button class="quick-action-btn" onclick="sendQuickMessage('I have cough and chest pain')">
+                            <i class="fas fa-lungs me-1"></i>Chest & Breathing
+                        </button>
+                        <button class="quick-action-btn" onclick="sendQuickMessage('I have joint pain and muscle weakness')">
+                            <i class="fas fa-running me-1"></i>Joint & Muscle
+                        </button>
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('Error resetting chat:', error);
+        });
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Auto-focus on input
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('messageInput').focus();
+});
+</script>
+{% endblock %}

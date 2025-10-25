@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - MedPredict{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Smart Disease Prediction System</h1>
+                <p class="lead mb-4">Get instant, AI-powered health predictions for diabetes, heart disease, and Parkinson's disease. Make informed decisions about your health with our advanced machine learning models.</p>
+                <div class="d-flex gap-3">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg">Go to Dashboard</a>
+                    {% else %}
+                    <a href="{% url 'register' %}" class="btn btn-light btn-lg">Get Started</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'images/hero-image.svg' %}" alt="Health Prediction" class="img-fluid" style="max-height: 400px;">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Why Choose MedPredict?</h2>
+            <p class="lead text-muted">Advanced machine learning technology for accurate health predictions</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-brain fa-lg"></i>
+                        </div>
+                        <h5 class="card-title">AI-Powered Predictions</h5>
+                        <p class="card-text text-muted">Our advanced machine learning models provide accurate predictions based on your health data.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-shield-alt fa-lg"></i>
+                        </div>
+                        <h5 class="card-title">Secure & Private</h5>
+                        <p class="card-text text-muted">Your health data is encrypted and stored securely. We prioritize your privacy and data protection.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-user-md fa-lg"></i>
+                        </div>
+                        <h5 class="card-title">Find Doctors</h5>
+                        <p class="card-text text-muted">Connect with qualified doctors in your area based on specialization, location, and ratings.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Disease Prediction Cards -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Available Predictions</h2>
+            <p class="lead text-muted">Choose from our available disease prediction models</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="disease-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-tint fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">Diabetes Prediction</h5>
+                        <p class="card-text text-muted">Predict diabetes risk based on glucose levels, BMI, blood pressure, and other health indicators.</p>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'diabetes_prediction' %}" class="btn btn-warning">Predict Now</a>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-warning">Login to Predict</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="disease-icon bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-heart fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">Heart Disease Prediction</h5>
+                        <p class="card-text text-muted">Assess heart disease risk using age, cholesterol levels, blood pressure, and other cardiovascular factors.</p>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'heart_disease_prediction' %}" class="btn btn-danger">Predict Now</a>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-danger">Login to Predict</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="disease-icon bg-secondary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-brain fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">Parkinson's Prediction</h5>
+                        <p class="card-text text-muted">Analyze voice patterns and other indicators to predict Parkinson's disease risk.</p>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'parkinsons_prediction' %}" class="btn btn-secondary">Predict Now</a>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-secondary">Login to Predict</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4">Ready to Take Control of Your Health?</h2>
+        <p class="lead mb-4">Join thousands of users who trust MedPredict for their health predictions.</p>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'register' %}" class="btn btn-light btn-lg me-3">Get Started Free</a>
+        <a href="{% url 'about' %}" class="btn btn-outline-light btn-lg">Learn More</a>
+        {% else %}
+        <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg">Go to Dashboard</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

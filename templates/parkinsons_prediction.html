@@ -1,0 +1,377 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Parkinson's Disease Prediction - MedPredict{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h2 class="fw-bold mb-0 text-center">
+                        <i class="fas fa-brain me-2"></i>Parkinson's Disease Prediction
+                    </h2>
+                </div>
+                <div class="card-body p-5">
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Important:</strong> This prediction is for informational purposes only and should not replace professional medical advice. Please consult with a healthcare provider for proper diagnosis and treatment.
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.fo.id_for_label }}" class="form-label">MDVP:Fo(Hz)</label>
+                                {{ form.fo }}
+                                <div class="form-text">Average vocal fundamental frequency</div>
+                                {% if form.fo.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.fo.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.fhi.id_for_label }}" class="form-label">MDVP:Fhi(Hz)</label>
+                                {{ form.fhi }}
+                                <div class="form-text">Maximum vocal fundamental frequency</div>
+                                {% if form.fhi.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.fhi.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.flo.id_for_label }}" class="form-label">MDVP:Flo(Hz)</label>
+                                {{ form.flo }}
+                                <div class="form-text">Minimum vocal fundamental frequency</div>
+                                {% if form.flo.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.flo.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.jitter_percent.id_for_label }}" class="form-label">Jitter(%)</label>
+                                {{ form.jitter_percent }}
+                                <div class="form-text">Jitter percentage</div>
+                                {% if form.jitter_percent.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.jitter_percent.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.jitter_abs.id_for_label }}" class="form-label">Jitter(Abs)</label>
+                                {{ form.jitter_abs }}
+                                <div class="form-text">Absolute jitter</div>
+                                {% if form.jitter_abs.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.jitter_abs.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.rap.id_for_label }}" class="form-label">RAP</label>
+                                {{ form.rap }}
+                                <div class="form-text">Relative amplitude perturbation</div>
+                                {% if form.rap.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.rap.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.ppq.id_for_label }}" class="form-label">PPQ</label>
+                                {{ form.ppq }}
+                                <div class="form-text">Five-point period perturbation quotient</div>
+                                {% if form.ppq.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.ppq.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.ddp.id_for_label }}" class="form-label">DDP</label>
+                                {{ form.ddp }}
+                                <div class="form-text">Difference of differences of periods</div>
+                                {% if form.ddp.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.ddp.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.shimmer.id_for_label }}" class="form-label">Shimmer</label>
+                                {{ form.shimmer }}
+                                <div class="form-text">Local shimmer</div>
+                                {% if form.shimmer.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.shimmer.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.shimmer_db.id_for_label }}" class="form-label">Shimmer(dB)</label>
+                                {{ form.shimmer_db }}
+                                <div class="form-text">Local shimmer in dB</div>
+                                {% if form.shimmer_db.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.shimmer_db.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.apq3.id_for_label }}" class="form-label">APQ3</label>
+                                {{ form.apq3 }}
+                                <div class="form-text">Three-point amplitude perturbation quotient</div>
+                                {% if form.apq3.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.apq3.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.apq5.id_for_label }}" class="form-label">APQ5</label>
+                                {{ form.apq5 }}
+                                <div class="form-text">Five-point amplitude perturbation quotient</div>
+                                {% if form.apq5.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.apq5.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.apq.id_for_label }}" class="form-label">APQ</label>
+                                {{ form.apq }}
+                                <div class="form-text">Amplitude perturbation quotient</div>
+                                {% if form.apq.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.apq.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.dda.id_for_label }}" class="form-label">DDA</label>
+                                {{ form.dda }}
+                                <div class="form-text">Difference of differences of amplitudes</div>
+                                {% if form.dda.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.dda.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.nhr.id_for_label }}" class="form-label">NHR</label>
+                                {{ form.nhr }}
+                                <div class="form-text">Noise-to-harmonics ratio</div>
+                                {% if form.nhr.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.nhr.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.hnr.id_for_label }}" class="form-label">HNR</label>
+                                {{ form.hnr }}
+                                <div class="form-text">Harmonics-to-noise ratio</div>
+                                {% if form.hnr.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.hnr.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.rpde.id_for_label }}" class="form-label">RPDE</label>
+                                {{ form.rpde }}
+                                <div class="form-text">Recurrence period density entropy</div>
+                                {% if form.rpde.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.rpde.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.dfa.id_for_label }}" class="form-label">DFA</label>
+                                {{ form.dfa }}
+                                <div class="form-text">Detrended fluctuation analysis</div>
+                                {% if form.dfa.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.dfa.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.spread1.id_for_label }}" class="form-label">Spread1</label>
+                                {{ form.spread1 }}
+                                <div class="form-text">Nonlinear measure of fundamental frequency variation</div>
+                                {% if form.spread1.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.spread1.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.spread2.id_for_label }}" class="form-label">Spread2</label>
+                                {{ form.spread2 }}
+                                <div class="form-text">Nonlinear measure of fundamental frequency variation</div>
+                                {% if form.spread2.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.spread2.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.d2.id_for_label }}" class="form-label">D2</label>
+                                {{ form.d2 }}
+                                <div class="form-text">Correlation dimension</div>
+                                {% if form.d2.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.d2.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.ppe.id_for_label }}" class="form-label">PPE</label>
+                                {{ form.ppe }}
+                                <div class="form-text">Pitch period entropy</div>
+                                {% if form.ppe.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.ppe.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-secondary btn-lg px-5">
+                                <i class="fas fa-brain me-2"></i>Predict Parkinson's Risk
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Information Card -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">About Parkinson's Disease Prediction</h5>
+                    <p class="text-muted mb-3">
+                        Our Parkinson's disease prediction model analyzes voice characteristics and other indicators to assess your risk of developing Parkinson's disease. 
+                        The model uses advanced signal processing techniques to detect subtle changes in voice patterns.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Early Signs:</h6>
+                            <ul class="text-muted small">
+                                <li>Voice changes (soft, hoarse, or monotone)</li>
+                                <li>Tremor in hands, arms, legs, or jaw</li>
+                                <li>Stiffness or slowness of movement</li>
+                                <li>Balance problems</li>
+                                <li>Loss of smell</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Management Tips:</h6>
+                            <ul class="text-muted small">
+                                <li>Regular exercise</li>
+                                <li>Physical therapy</li>
+                                <li>Speech therapy</li>
+                                <li>Medication adherence</li>
+                                <li>Support groups</li>
+                                <li>Regular medical follow-up</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

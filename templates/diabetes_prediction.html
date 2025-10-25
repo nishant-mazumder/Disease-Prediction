@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Diabetes Prediction - MedPredict{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-warning text-white">
+                    <h2 class="fw-bold mb-0 text-center">
+                        <i class="fas fa-tint me-2"></i>Diabetes Prediction
+                    </h2>
+                </div>
+                <div class="card-body p-5">
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Important:</strong> This prediction is for informational purposes only and should not replace professional medical advice. Please consult with a healthcare provider for proper diagnosis and treatment.
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.pregnancies.id_for_label }}" class="form-label">Number of Pregnancies</label>
+                                {{ form.pregnancies }}
+                                <div class="form-text">Number of times pregnant (0-17)</div>
+                                {% if form.pregnancies.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.pregnancies.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.glucose.id_for_label }}" class="form-label">Glucose Level</label>
+                                {{ form.glucose }}
+                                <div class="form-text">Plasma glucose concentration (mg/dL)</div>
+                                {% if form.glucose.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.glucose.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.blood_pressure.id_for_label }}" class="form-label">Blood Pressure</label>
+                                {{ form.blood_pressure }}
+                                <div class="form-text">Diastolic blood pressure (mm Hg)</div>
+                                {% if form.blood_pressure.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.blood_pressure.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.skin_thickness.id_for_label }}" class="form-label">Skin Thickness</label>
+                                {{ form.skin_thickness }}
+                                <div class="form-text">Triceps skin fold thickness (mm)</div>
+                                {% if form.skin_thickness.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.skin_thickness.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.insulin.id_for_label }}" class="form-label">Insulin Level</label>
+                                {{ form.insulin }}
+                                <div class="form-text">2-Hour serum insulin (mu U/ml)</div>
+                                {% if form.insulin.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.insulin.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.bmi.id_for_label }}" class="form-label">BMI</label>
+                                {{ form.bmi }}
+                                <div class="form-text">Body mass index (weight in kg/(height in m)²)</div>
+                                {% if form.bmi.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.bmi.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.diabetes_pedigree_function.id_for_label }}" class="form-label">Diabetes Pedigree Function</label>
+                                {{ form.diabetes_pedigree_function }}
+                                <div class="form-text">Diabetes pedigree function (0.078-2.42)</div>
+                                {% if form.diabetes_pedigree_function.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.diabetes_pedigree_function.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.age.id_for_label }}" class="form-label">Age</label>
+                                {{ form.age }}
+                                <div class="form-text">Age in years (21-81)</div>
+                                {% if form.age.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.age.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-warning btn-lg px-5">
+                                <i class="fas fa-brain me-2"></i>Predict Diabetes Risk
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Information Card -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">About Diabetes Prediction</h5>
+                    <p class="text-muted mb-3">
+                        Our diabetes prediction model analyzes various health indicators to assess your risk of developing diabetes. 
+                        The model considers factors such as glucose levels, blood pressure, BMI, and family history.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Risk Factors:</h6>
+                            <ul class="text-muted small">
+                                <li>High glucose levels</li>
+                                <li>Elevated blood pressure</li>
+                                <li>High BMI</li>
+                                <li>Family history</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Prevention Tips:</h6>
+                            <ul class="text-muted small">
+                                <li>Maintain healthy weight</li>
+                                <li>Regular exercise</li>
+                                <li>Balanced diet</li>
+                                <li>Regular check-ups</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Heart Disease Prediction - MedPredict{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="fw-bold mb-0 text-center">
+                        <i class="fas fa-heart me-2"></i>Heart Disease Prediction
+                    </h2>
+                </div>
+                <div class="card-body p-5">
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Important:</strong> This prediction is for informational purposes only and should not replace professional medical advice. Please consult with a healthcare provider for proper diagnosis and treatment.
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.age.id_for_label }}" class="form-label">Age</label>
+                                {{ form.age }}
+                                <div class="form-text">Age in years</div>
+                                {% if form.age.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.age.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.sex.id_for_label }}" class="form-label">Sex</label>
+                                {{ form.sex }}
+                                <div class="form-text">Biological sex</div>
+                                {% if form.sex.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.sex.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.cp.id_for_label }}" class="form-label">Chest Pain Type</label>
+                                {{ form.cp }}
+                                <div class="form-text">0: Typical angina, 1: Atypical angina, 2: Non-anginal pain, 3: Asymptomatic</div>
+                                {% if form.cp.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.cp.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.trestbps.id_for_label }}" class="form-label">Resting Blood Pressure</label>
+                                {{ form.trestbps }}
+                                <div class="form-text">Resting blood pressure (mm Hg)</div>
+                                {% if form.trestbps.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.trestbps.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.chol.id_for_label }}" class="form-label">Cholesterol</label>
+                                {{ form.chol }}
+                                <div class="form-text">Serum cholesterol (mg/dl)</div>
+                                {% if form.chol.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.chol.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.fbs.id_for_label }}" class="form-label">Fasting Blood Sugar</label>
+                                {{ form.fbs }}
+                                <div class="form-text">Fasting blood sugar > 120 mg/dl</div>
+                                {% if form.fbs.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.fbs.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.restecg.id_for_label }}" class="form-label">Resting ECG</label>
+                                {{ form.restecg }}
+                                <div class="form-text">0: Normal, 1: ST-T wave abnormality, 2: Left ventricular hypertrophy</div>
+                                {% if form.restecg.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.restecg.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.thalach.id_for_label }}" class="form-label">Max Heart Rate</label>
+                                {{ form.thalach }}
+                                <div class="form-text">Maximum heart rate achieved</div>
+                                {% if form.thalach.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.thalach.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.exang.id_for_label }}" class="form-label">Exercise Induced Angina</label>
+                                {{ form.exang }}
+                                <div class="form-text">Exercise induced angina</div>
+                                {% if form.exang.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.exang.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.oldpeak.id_for_label }}" class="form-label">ST Depression</label>
+                                {{ form.oldpeak }}
+                                <div class="form-text">ST depression induced by exercise relative to rest</div>
+                                {% if form.oldpeak.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.oldpeak.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.slope.id_for_label }}" class="form-label">Slope</label>
+                                {{ form.slope }}
+                                <div class="form-text">0: Upsloping, 1: Flat, 2: Downsloping</div>
+                                {% if form.slope.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.slope.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.ca.id_for_label }}" class="form-label">Number of Major Vessels</label>
+                                {{ form.ca }}
+                                <div class="form-text">Number of major vessels colored by flourosopy</div>
+                                {% if form.ca.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.ca.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.thal.id_for_label }}" class="form-label">Thalassemia</label>
+                                {{ form.thal }}
+                                <div class="form-text">0: Normal, 1: Fixed defect, 2: Reversible defect</div>
+                                {% if form.thal.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.thal.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-danger btn-lg px-5">
+                                <i class="fas fa-heartbeat me-2"></i>Predict Heart Disease Risk
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Information Card -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">About Heart Disease Prediction</h5>
+                    <p class="text-muted mb-3">
+                        Our heart disease prediction model analyzes cardiovascular risk factors to assess your likelihood of developing heart disease. 
+                        The model considers factors such as age, cholesterol levels, blood pressure, and exercise capacity.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Risk Factors:</h6>
+                            <ul class="text-muted small">
+                                <li>High cholesterol</li>
+                                <li>High blood pressure</li>
+                                <li>Age and gender</li>
+                                <li>Family history</li>
+                                <li>Smoking</li>
+                                <li>Diabetes</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Prevention Tips:</h6>
+                            <ul class="text-muted small">
+                                <li>Regular exercise</li>
+                                <li>Healthy diet</li>
+                                <li>Maintain healthy weight</li>
+                                <li>Don't smoke</li>
+                                <li>Manage stress</li>
+                                <li>Regular check-ups</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

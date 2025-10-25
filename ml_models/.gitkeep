@@ -1,0 +1,5 @@
+# This file ensures the ml_models directory is tracked by git
+# Place your .pkl model files here:
+# - diabetes_model.pkl
+# - heart_disease_model.pkl
+# - parkinsons_model.pkl
