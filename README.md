@@ -77,22 +77,34 @@ This application is intended for **educational purposes only** and **should not 
 
 ## ⚙️ Setup & Installation
 
-1. Clone the repository:
-   https://github.com/nishant-mazumder/Disease-Prediction.git
+1. **Clone the Repository**
+   ```bash
+    https://github.com/nishant-mazumder/Disease-Prediction.git
+   ```
 
-2. Create a virtual environment:
+2. **Create a virtual environment:**
+   ```bash
    python -m venv venv
+   ```
 
-3. Activate the virtual environment:
+3. **Activate the virtual environment:**
+   ```bash
    .\venv\Scripts\Activate.ps1
+   ```
    
-4. Install dependencies
+4. **Install dependencies**
+   ```bash
    pip install -r requirements.txt
+   ```
 
-5. Run migrations:
-   python manage.py migrate
+5. **Run migrations:**
+    ```
+    python manage.py migrate
+    ```
 
-6. Start the server:
+6. **Start the server:**
+   ```bash
    python manage.py runserver
+   ```
 
 
