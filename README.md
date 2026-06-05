@@ -49,7 +49,7 @@ A smart and user-friendly **disease prediction system** for diabetes, heart dise
 - Accurately predicts the probability of diabetes, heart disease, and Parkinson’s based on user input  
 - Provides instant feedback via the web interface and chatbot  
 - Enables storage and management of user data for follow-up or further analysis
-- Diabetes Prediction Model – Accuracy: 78.34%
+- Diabetes Disease Prediction Model – Accuracy: 78.34%
 - Heart Disease Prediction Model – Accuracy: 85.12%
 - Parkinson’s Disease Prediction Model – Accuracy: 87.18%
 
