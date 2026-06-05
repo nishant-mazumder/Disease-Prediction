@@ -7,3 +7,6 @@ scikit-learn==1.7.2
 python-decouple==3.8
 django-crispy-forms==2.0
 crispy-bootstrap5==0.7
+
+gunicorn==23.0.0
+whitenoise==6.8.2
